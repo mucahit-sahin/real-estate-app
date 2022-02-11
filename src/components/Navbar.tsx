@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
-    <div className="container bg-tango flex flex-row">
+    <div className="bg-tango flex flex-row">
       {/* Logo */}
       <div className="flex items-center justify-between flex-wrap p-3">
         <span className="text-white text-xl font-bold flex-row">
