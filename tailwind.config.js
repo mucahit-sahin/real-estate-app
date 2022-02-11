@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         tango: "#ed6b2d",
       },
+      flex: {
+        3: "3 3 0%",
+      },
     },
   },
   plugins: [],
