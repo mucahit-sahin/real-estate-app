@@ -1,16 +1,19 @@
 import React from "react";
+import { CategoriesFilter } from "./CategoriesFilter";
 import { NumberofBedrooms } from "./NumberofBedrooms";
 import { PriceRanges } from "./PriceRanges";
 
 export const FilterSearch = () => {
   const [priceIsOpen, setPriceIsOpen] = React.useState(false);
   const [bedroomIsOpen, setBedroomIsOpen] = React.useState(false);
+  const [categoryIsOpen, setCategoryIsOpen] = React.useState(false);
 
   const [location, setLocation] = React.useState("");
   const [minPrice, setMinPrice] = React.useState<number>(0);
   const [maxPrice, setMaxPrice] = React.useState<number>(0);
   const [minBedrooms, setMinBedrooms] = React.useState<number>(0);
   const [maxBedrooms, setMaxBedrooms] = React.useState<number>(0);
+  const [category, setCategory] = React.useState<string[]>([]);
 
   const priceStatus = () => {
     if (maxPrice !== 0 && minPrice > maxPrice) {
@@ -51,7 +54,7 @@ export const FilterSearch = () => {
         <input
           className="appearance-none rounded bg-white w-full text-gray-700 mr-2 py-2 px-2 leading-tight focus:outline-none"
           type="text"
-          placeholder="Search"
+          placeholder="Search Location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
@@ -59,13 +62,18 @@ export const FilterSearch = () => {
       {/*Price Range*/}
       <div className="flex relative mr-3 " onClick={() => setPriceIsOpen(true)}>
         <div
-          className={`w-40 rounded  hover:bg-tango  hover:text-white py-2 px-2 leading-tight focus:outline-none ${
+          className={`w-40 flex flex-row items-center rounded  hover:bg-tango  hover:text-white py-2 px-2 leading-tight focus:outline-none ${
             minPrice === 0 && maxPrice === 0
               ? "bg-white text-gray-700"
               : "bg-tango text-white"
           }`}
         >
           {priceStatus()}
+          <img
+            className="ml-auto w-3 h-3 "
+            src="https://www.svgrepo.com/show/80156/down-arrow.svg"
+            alt="down arrow"
+          />
         </div>
         {/* Price Range Modal */}
         <PriceRanges
@@ -78,17 +86,22 @@ export const FilterSearch = () => {
       </div>
       {/*Bedrooms*/}
       <div
-        className="flex flex-row relative mr-3"
+        className="flex relative mr-3"
         onClick={() => setBedroomIsOpen(true)}
       >
         <div
-          className={`w-40 rounded  hover:bg-tango  hover:text-white py-2 px-2 leading-tight focus:outline-none ${
+          className={`w-40 flex flex-row items-center rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none ${
             minBedrooms === 0 && maxBedrooms === 0
               ? "bg-white text-gray-700"
               : "bg-tango text-white"
           }`}
         >
           {bedroomStatus()}
+          <img
+            className="ml-auto w-3 h-3 "
+            src="https://www.svgrepo.com/show/80156/down-arrow.svg"
+            alt="down arrow"
+          />
         </div>
         {/* Number of Bedrooms Modal */}
         <NumberofBedrooms
@@ -99,15 +112,36 @@ export const FilterSearch = () => {
           setMaxBedrooms={setMaxBedrooms}
         />
       </div>
+      {/* Categories */}
+      <div
+        className="flex relative mr-3"
+        onClick={() => setCategoryIsOpen(true)}
+      >
+        <div className="w-40 flex flex-row items-center bg-white rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none">
+          Categories
+          <img
+            className="ml-auto w-3 h-3 "
+            src="https://www.svgrepo.com/show/80156/down-arrow.svg"
+            alt="down arrow"
+          />
+        </div>
+        {/* Categories Modal */}
+        <CategoriesFilter
+          categoryIsOpen={categoryIsOpen}
+          category={category}
+          setCategory={setCategory}
+        />
+      </div>
 
       {/* Close Modals */}
       <div
         className={`absolute left-0 top-0 w-screen h-screen z-49 ${
-          priceIsOpen || bedroomIsOpen ? "block" : "hidden"
+          priceIsOpen || bedroomIsOpen || categoryIsOpen ? "block" : "hidden"
         }`}
         onClick={() => {
           setPriceIsOpen(false);
           setBedroomIsOpen(false);
+          setCategoryIsOpen(false);
         }}
       ></div>
     </div>
