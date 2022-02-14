@@ -7,6 +7,7 @@ module.exports = {
         tango: "#ed6b2d",
       },
       flex: {
+        2: "2 2 0%",
         3: "3 3 0%",
       },
     },
