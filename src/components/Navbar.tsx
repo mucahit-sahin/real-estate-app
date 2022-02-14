@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../store/hooks";
+import { openLoginModal, openSignupModal } from "../store/slices/ModalSlice";
 
 export const Navbar = () => {
+  const dispatch = useAppDispatch();
+
   return (
     <div className="bg-tango flex flex-row">
       {/* Logo */}
@@ -30,14 +34,20 @@ export const Navbar = () => {
           </li>
           <div className="bg-white block w-1 h-full"></div>
           <li className="flex items-center px-2 py-2">
-            <Link to="/register" className="text-white ">
+            <button
+              className="text-white "
+              onClick={() => dispatch(openSignupModal())}
+            >
               Register
-            </Link>
+            </button>
           </li>
           <li className="flex items-center px-2 py-2">
-            <Link to="/login" className="text-white">
+            <button
+              className="text-white"
+              onClick={() => dispatch(openLoginModal())}
+            >
               Login
-            </Link>
+            </button>
           </li>
         </ul>
       </div>
