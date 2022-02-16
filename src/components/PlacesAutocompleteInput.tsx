@@ -12,13 +12,15 @@ const PlacesAutocompleteInput = ({
   itemClass,
   placeholder,
   itemsClass,
+  value,
 }: {
   className: string;
   itemClass: string;
   placeholder: string;
   itemsClass: string;
+  value?: string;
 }) => {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(value || "");
   const dispatch = useAppDispatch();
   let navigate = useNavigate();
 
