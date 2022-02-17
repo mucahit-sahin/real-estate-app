@@ -3,6 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { useAppDispatch } from "../store/hooks";
 import { closeSignupModal, openLoginModal } from "../store/slices/ModalSlice";
+import { signup } from "../store/slices/UserSlice";
+import { registerFormData } from "../types/authTypes";
 
 interface IFormInput {
   email: string;
@@ -21,7 +23,16 @@ const RegisterModal = () => {
     watch,
     formState: { errors },
   } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    const formdata: registerFormData = {
+      email: data.email,
+      password: data.password,
+      phoneNumber: data.phoneNumber,
+      fullname: data.fullname,
+    };
+    dispatch(signup(formdata));
+    dispatch(closeSignupModal());
+  };
 
   return (
     <div

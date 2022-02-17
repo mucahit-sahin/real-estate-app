@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { openLoginModal, openSignupModal } from "../store/slices/ModalSlice";
+import { logout } from "../store/slices/UserSlice";
 
 export const Navbar = () => {
   const dispatch = useAppDispatch();
+  const { data } = useAppSelector((state) => state.user);
 
   return (
     <div className="bg-tango flex flex-row">
@@ -33,22 +35,44 @@ export const Navbar = () => {
             </Link>
           </li>
           <div className="bg-white block w-1 h-full"></div>
-          <li className="flex items-center px-2 py-2">
-            <button
-              className="text-white "
-              onClick={() => dispatch(openSignupModal())}
-            >
-              Register
-            </button>
-          </li>
-          <li className="flex items-center px-2 py-2">
-            <button
-              className="text-white"
-              onClick={() => dispatch(openLoginModal())}
-            >
-              Login
-            </button>
-          </li>
+          {data ? (
+            <>
+              <li className="flex items-center px-2 py-2">
+                <Link to="/profile" className="text-white">
+                  {data.user.fullname}
+                </Link>
+              </li>
+              <div className="bg-white block w-1 h-full"></div>
+              <li className="flex items-center px-2 py-2">
+                <button
+                  className="text-white"
+                  onClick={() => dispatch(logout())}
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="flex items-center px-2 py-2">
+                <button
+                  className="text-white "
+                  onClick={() => dispatch(openSignupModal())}
+                >
+                  Register
+                </button>
+              </li>
+              <div className="bg-white block w-1 h-full"></div>
+              <li className="flex items-center px-2 py-2">
+                <button
+                  className="text-white"
+                  onClick={() => dispatch(openLoginModal())}
+                >
+                  Login
+                </button>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>

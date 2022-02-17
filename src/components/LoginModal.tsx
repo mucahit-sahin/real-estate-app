@@ -3,6 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { useAppDispatch } from "../store/hooks";
 import { closeLoginModal, openSignupModal } from "../store/slices/ModalSlice";
+import { loginFormData } from "../types/authTypes";
+import { login } from "../store/slices/UserSlice";
 
 type IFormInput = {
   email: string;
@@ -16,7 +18,14 @@ const LoginModal = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    const formdata: loginFormData = {
+      email: data.email,
+      password: data.password,
+    };
+    dispatch(login(formdata));
+    dispatch(closeLoginModal());
+  };
 
   return (
     <div
