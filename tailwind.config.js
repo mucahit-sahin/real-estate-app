@@ -11,6 +11,9 @@ module.exports = {
         3: "3 3 0%",
       },
     },
+    fontFamily: {
+      baloo: ["Baloo Bhaijaan", "sans-serif"],
+    },
   },
   plugins: [],
 };
