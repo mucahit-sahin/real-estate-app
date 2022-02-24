@@ -1,23 +1,21 @@
-import axios from "axios";
+import api from "../api/api";
 //types
 import { loginFormData, registerFormData } from "../types/authTypes";
 
-const API_URL = "http://localhost:5000/api/v1/user/";
-
 //register user
 const signup = async (formData: registerFormData) => {
-  const response = await axios.post(API_URL + "signup", formData);
+  const response = await api.post("user/signup", formData);
   if (response.data) {
-    localStorage.setItem("token", JSON.stringify(response.data.token));
+    localStorage.setItem("token", response.data.token);
   }
   return response.data;
 };
 
 //login user
 const login = async (formData: loginFormData) => {
-  const response = await axios.post(API_URL + "signin", formData);
+  const response = await api.post("user/signin", formData);
   if (response.data) {
-    localStorage.setItem("token", JSON.stringify(response.data.token));
+    localStorage.setItem("token", response.data.token);
   }
   return response.data;
 };
@@ -27,15 +25,13 @@ const loadUser = async () => {
   const token = localStorage.getItem("token");
   console.log(token);
   if (token) {
-    const response = await axios.get(API_URL + "auth", {
-      headers: {
-        authorization: token,
-      },
-    });
-    console.log(response.data);
-    return response.data;
+    api.defaults.headers.common["authorization"] = token;
+  } else {
+    delete api.defaults.headers.common["authorization"];
   }
-  return null;
+  const response = await api.get("user/auth");
+  console.log(response.data);
+  return response.data;
 };
 
 //logout user
