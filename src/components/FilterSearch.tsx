@@ -1,6 +1,8 @@
 import React from "react";
+import { useAppSelector } from "../store/hooks";
 import { CategoriesFilter } from "./CategoriesFilter";
 import { NumberofBedrooms } from "./NumberofBedrooms";
+import PlacesAutocompleteInput from "./PlacesAutocompleteInput";
 import { PriceRanges } from "./PriceRanges";
 
 export const FilterSearch = () => {
@@ -8,7 +10,7 @@ export const FilterSearch = () => {
   const [bedroomIsOpen, setBedroomIsOpen] = React.useState(false);
   const [categoryIsOpen, setCategoryIsOpen] = React.useState(false);
 
-  const [location, setLocation] = React.useState("");
+  const { address } = useAppSelector((state) => state.searchLocation);
   const [minPrice, setMinPrice] = React.useState<number>(0);
   const [maxPrice, setMaxPrice] = React.useState<number>(0);
   const [minBedrooms, setMinBedrooms] = React.useState<number>(0);
@@ -48,21 +50,24 @@ export const FilterSearch = () => {
     }
   };
   return (
-    <div className="flex flex-row flex-1 p-3 bg-gray-200">
+    <div className="flex flex-col md:flex-row flex-1 p-3 bg-gray-200">
       {/* Search Input*/}
-      <div className="flex">
-        <input
+      <div className="flex w-full md:w-1/4 md:mr-3">
+        <PlacesAutocompleteInput
           className="appearance-none rounded bg-white w-full text-gray-700 mr-2 py-2 px-2 leading-tight focus:outline-none"
-          type="text"
-          placeholder="Search Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          itemsClass="absolute w-full shadow-lg z-50"
+          itemClass=" p-2 text-gray-600 font-normal text-base"
+          placeholder="Search for a location"
+          value={address}
         />
       </div>
       {/*Price Range*/}
-      <div className="flex relative mr-3 " onClick={() => setPriceIsOpen(true)}>
+      <div
+        className="flex relative md:mr-3 mt-2 md:mt-0"
+        onClick={() => setPriceIsOpen(true)}
+      >
         <div
-          className={`w-40 flex flex-row items-center rounded  hover:bg-tango  hover:text-white py-2 px-2 leading-tight focus:outline-none ${
+          className={` w-full md:w-40  flex flex-row items-center rounded  hover:bg-tango  hover:text-white py-2 px-2 leading-tight focus:outline-none ${
             minPrice === 0 && maxPrice === 0
               ? "bg-white text-gray-700"
               : "bg-tango text-white"
@@ -86,11 +91,11 @@ export const FilterSearch = () => {
       </div>
       {/*Bedrooms*/}
       <div
-        className="flex relative mr-3"
+        className="flex relative md:mr-3 mt-2 md:mt-0"
         onClick={() => setBedroomIsOpen(true)}
       >
         <div
-          className={`w-40 flex flex-row items-center rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none ${
+          className={` w-full md:w-40  flex flex-row items-center rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none ${
             minBedrooms === 0 && maxBedrooms === 0
               ? "bg-white text-gray-700"
               : "bg-tango text-white"
@@ -114,10 +119,10 @@ export const FilterSearch = () => {
       </div>
       {/* Categories */}
       <div
-        className="flex relative mr-3"
+        className="flex relative md:mr-3 mt-2 md:mt-0"
         onClick={() => setCategoryIsOpen(true)}
       >
-        <div className="w-40 flex flex-row items-center bg-white rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none">
+        <div className=" w-full md:w-40  flex flex-row items-center bg-white rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none">
           Categories
           <img
             className="ml-auto w-3 h-3 "

@@ -30,7 +30,7 @@ export const Navbar = () => {
       <div className="flex items-center justify-between flex-wrap p-3 ml-auto mr-0">
         <ul className="flex flex-row list-reset text-base">
           <li className="flex items-center px-2 py-2">
-            <Link to="/" className="text-white">
+            <Link to="/rent-out" className="text-white">
               List your property
             </Link>
           </li>

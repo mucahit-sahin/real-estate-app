@@ -48,7 +48,7 @@ export const PriceRanges = ({
   return (
     <>
       <div
-        className={`absolute top-full left-0 bg-white rounded shadow z-50 mt-2 p-3 ${
+        className={`absolute top-full left-0 bg-white rounded shadow z-50 md:mt-2 p-3 ${
           priceIsOpen ? "block" : "hidden"
         }`}
       >
