@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { Categories } from "./components/Categories";
 import { FilterSearch } from "./components/FilterSearch";
 import { Footer } from "./components/Footer";
@@ -10,13 +10,25 @@ import { Navbar } from "./components/Navbar";
 import RegisterModal from "./components/RegisterModal";
 import { RentoutBannerSM } from "./components/RentoutBannerSM";
 import { SearchLocation } from "./components/SearchLocation";
-import { useAppSelector } from "./store/hooks";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { loadUser } from "./store/slices/UserSlice";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import RentOut from "./components/RentOut";
+import Profile from "./components/Profile";
+import CreateProperty from "./components/CreateProperty";
+import Loading from "./components/Loading";
+import Alert from "./components/Alert";
 
 function App() {
   const { isLoginOpen, isSignupOpen } = useAppSelector((state) => state.modals);
+  const { data, loading } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col ">
@@ -53,6 +65,41 @@ function App() {
               </>
             }
           />
+          <Route
+            path="rent-out"
+            element={
+              <>
+                <RentOut />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="create-property"
+            element={
+              data ? (
+                <>
+                  <CreateProperty />
+                  <Footer />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              data ? (
+                <>
+                  <Profile />
+                  <Footer />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
         </Route>
       </Routes>
 
@@ -60,6 +107,11 @@ function App() {
       {isLoginOpen && <LoginModal />}
       {/* Register Modal */}
       {isSignupOpen && <RegisterModal />}
+      {/* Loading */}
+      {loading && <Loading />}
+
+      {/* Alert */}
+      <Alert />
     </div>
   );
 }
