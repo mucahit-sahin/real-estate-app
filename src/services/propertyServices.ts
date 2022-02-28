@@ -1,8 +1,8 @@
 import api from "../api/api";
-import { Property } from "../types/propertyTypes";
+import { PropertyFormData } from "../types/propertyTypes";
 
 
-export const createPropertyService = async (property: Property) => {
+const createPropertyService = async (property: PropertyFormData) => {
     try {
         const response = await api.post("properties/create", property);
         console.log("createPropertyService response", response);
@@ -11,3 +11,9 @@ export const createPropertyService = async (property: Property) => {
         return error;
     }
 };
+
+const propertyServices = {
+    createPropertyService,
+};
+
+export default propertyServices;

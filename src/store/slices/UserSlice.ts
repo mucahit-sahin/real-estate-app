@@ -9,8 +9,9 @@ import {
 
 const initialState: UserState = {
   data: null,
+  profileProperties: null,
   loading: false,
-  error: null,
+  error: "",
 } as UserState;
 
 export const signup = createAsyncThunk(
@@ -53,6 +54,17 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   await authServices.logout();
 });
 
+export const getProfileProperties = createAsyncThunk(
+  "auth/getProfileProperties",
+  async (thunkAPI) => {
+    try {
+      return await authServices.getProfileProperties();
+    } catch (error: any) {
+      return;
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -92,6 +104,17 @@ export const userSlice = createSlice({
     });
     builder.addCase(loadUser.rejected, (state) => {
       state.error = "Load user failed";
+      state.loading = false;
+    });
+    builder.addCase(getProfileProperties.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProfileProperties.fulfilled, (state, action) => {
+      state.profileProperties = action.payload.properties;
+      state.loading = false;
+    });
+    builder.addCase(getProfileProperties.rejected, (state) => {
+      state.error = "Load User Properties failed";
       state.loading = false;
     });
   },

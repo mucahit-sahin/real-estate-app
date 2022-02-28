@@ -39,11 +39,17 @@ const logout = async () => {
   localStorage.removeItem("token");
 };
 
+//get profile properties
+const getProfileProperties = async () => {
+  const response = await api.get("user/profile/properties");
+  return response.data;
+};
+
 const authServices = {
   signup,
   login,
   logout,
-  loadUser,
+  loadUser,getProfileProperties
 };
 
 export default authServices;

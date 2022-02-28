@@ -9,9 +9,11 @@ const List = () => {
         height: "calc(100vh - 124px)",
       }}
     >
+      {/*
       <ListItem />
       <ListItem />
       <ListItem />
+      */}
     </div>
   );
 };

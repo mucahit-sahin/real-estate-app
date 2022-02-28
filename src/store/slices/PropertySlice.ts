@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { Property, PropertyState } from "../../types/propertyTypes";
-import { createPropertyService } from "../../services/propertyServices";
+import { Property, PropertyFormData, PropertyState } from "../../types/propertyTypes";
+import propertyServices from "../../services/propertyServices";
 
 const initialState:PropertyState = {
     properties: [],
@@ -15,9 +15,9 @@ const initialState:PropertyState = {
 // create property
 export const createProperty = createAsyncThunk(
     "property/create",
-    async (property: Property, thunkAPI) => {
+    async (property: PropertyFormData, thunkAPI) => {
         try {
-            const response = await createPropertyService(property);
+            const response = await propertyServices.createPropertyService(property);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error);

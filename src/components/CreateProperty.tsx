@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { AlertType, showAlert } from "../store/slices/AlertSlice";
 import { createProperty } from "../store/slices/PropertySlice";
-import { Property } from "../types/propertyTypes";
+import { PropertyFormData } from "../types/propertyTypes";
 import geoCode from "../utils/geoCode";
 import Loading from "./Loading";
 
@@ -15,12 +15,14 @@ const CreateProperty = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<Property>();
+  } = useForm<PropertyFormData>();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.property);
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<Property> = (data: Property) => {
+  const onSubmit: SubmitHandler<PropertyFormData> = (
+    data: PropertyFormData
+  ) => {
     console.log(data);
     dispatch(createProperty(data));
     dispatch(

@@ -1,7 +1,10 @@
+import { Property } from "./propertyTypes";
+
 export interface UserState {
   data: UserResponse | null;
+  profileProperties: Property[] | null;
   loading: boolean;
-  error: string | null;
+  error: string ;
 }
 
 export interface User {
