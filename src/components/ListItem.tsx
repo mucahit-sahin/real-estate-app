@@ -4,14 +4,29 @@ import { Pagination } from "swiper";
 
 import { FiPhoneCall } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
+import { Property } from "../types/propertyTypes";
 
-const ListItem = () => {
+const ListItem = ({ property }: { property: Property }) => {
+  const {
+    title,
+    price,
+    phoneNumber,
+    address,
+    isCatfriendly,
+    isDogfriendly,
+    isSmokingfriendly,
+  } = property;
+
+  const catFriendly = isCatfriendly ? "Cat friendly" : "";
+  const dogFriendly = isDogfriendly ? "Dog friendly" : "";
+  const smokingFriendly = isSmokingfriendly ? "Smoking friendly" : "";
+
   return (
     <div className="flex flex-col m-2 rounded shadow ">
       <div className="flex flex-row p-2 border-b-2">
         <div className="flex flex-col">
-          <span className="font-bold text-base">Title</span>
-          <span className=" text-sm">Address</span>
+          <span className="font-bold text-base">{title}</span>
+          <span className=" text-sm">{address}</span>
         </div>
         <div className="flex flex-col justify-center ml-auto">
           {/* Favorite */}
@@ -42,14 +57,16 @@ const ListItem = () => {
         </Swiper>
         {/* Content */}
         <div className=" flex-1  flex flex-col p-2">
-          <h3 className="flex-1 text-xl font-bold">$5000</h3>
-          <span className="flex-1 text-tango text-base"> 2 Beds</span>
+          <h3 className="flex-1 text-xl font-bold">${price}</h3>
+          <span className="flex-1 text-tango text-base">
+            {property.bedrooms + " Bedrooms"}
+          </span>
           <span className="flex-2 text-tango text-sm">
-            Dog Friendly, Cat Friendly, In Unit Washer & Dryer, Dishwasher
+            {catFriendly} {dogFriendly} {smokingFriendly}
           </span>
           <span className="flex-1 flex flex-row items-center text-tango text-base">
             <FiPhoneCall className="mr-1" />
-            (818) 296-0931
+            {phoneNumber}
           </span>
           <button className="bg-tango text-white py-2 px-4 mt-auto  rounded">
             Contact
