@@ -1,56 +1,26 @@
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import React from "react";
-import { useAppSelector } from "../store/hooks";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getProperties } from "../store/slices/PropertySlice";
+import { Property } from "../types/propertyTypes";
 
 export const Map = () => {
-  const [fakePlaces] = React.useState([
-    {
-      position: {
-        lat: 40.7128,
-        lng: -74.006,
-      },
-      key: "1",
-      defaultAnimation: 2,
-      image:
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80",
-      name: "New York",
-      description:
-        "New York is a state in the Northeastern and Mid-Atlantic regions of the United States. Its ten boroughs, with the five boroughs in New York proper, constitute New York City. With an estimated 2018 population of about 16 million, New York is the most populous U.S. state, and the world's third-largest state by population.",
-      price: "$1000",
-    },
-    {
-      position: {
-        lat: 40.7128,
-        lng: -72.006,
-      },
-      key: "2",
-      defaultAnimation: 2,
-      image:
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80",
-      name: "Red House",
-      description:
-        "New York is a state in the Northeastern and Mid-Atlantic regions of the United States. Its ten boroughs, with the five boroughs in New York proper, constitute New York City. With an estimated 2018 population of about 16 million, New York is the most populous U.S. state, and the world's third-largest state by population.",
-      price: "$1500",
-    },
-    {
-      position: {
-        lat: 42.7128,
-        lng: -72.006,
-      },
-      key: "3",
-      defaultAnimation: 2,
-      image:
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80",
-      name: "White House",
-      description:
-        "New York is a state in the Northeastern and Mid-Atlantic regions of the United States. Its ten boroughs, with the five boroughs in New York proper, constitute New York City. With an estimated 2018 population of about 16 million, New York is the most populous U.S. state, and the world's third-largest state by population.",
-      price: "$1200",
-    },
-  ]);
-
+  const dispatch = useAppDispatch();
   const { lat, lng } = useAppSelector((state) => state.searchLocation);
+  const { properties } = useAppSelector((state) => state.property);
 
-  const [selectedPlace, setSelectedPlace] = React.useState<any | null>();
+  const [selectedPlace, setSelectedPlace] = React.useState<Property | null>();
+  const [startPosition, setStartPosition] = React.useState<{
+    lat: number;
+    lng: number;
+  } | null>({
+    lat,
+    lng,
+  });
+
+  useEffect(() => {
+    dispatch(getProperties());
+  }, [dispatch]);
   return (
     <div
       className="flex-3"
@@ -60,18 +30,18 @@ export const Map = () => {
     >
       <GoogleMap
         mapContainerClassName="w-full h-full"
-        center={{ lat: lat, lng: lng }}
+        center={startPosition || { lat: 0, lng: 0 }}
         zoom={10}
         options={{
           disableDefaultUI: true,
         }}
       >
         {/* Child components, such as markers, info windows, etc. */}
-        {fakePlaces.map((place) => (
+        {properties.map((place) => (
           <Marker
-            key={place.key}
-            position={place.position}
-            title={place.name}
+            key={place._id}
+            position={{ lat: place.latitude, lng: place.longitude }}
+            title={place.title}
             icon={{
               url: "https://www.apartments.com/a/272a9e/modules/searchmap/content/images/mappindefaultgreen.svg",
             }}
@@ -79,7 +49,7 @@ export const Map = () => {
           />
         ))}
         {selectedPlace && (
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-10 w-full md:w-1/3 flex flex-row bg-white rounded shadow shadow-slate-400">
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-2 z-10 w-full md:w-1/2 lg:w-1/3 flex flex-row bg-white rounded shadow shadow-slate-400">
             <div
               className="absolute -right-2 -top-2 w-10 h-10 rounded-full bg-tango flex items-center justify-center text-white"
               onClick={() => setSelectedPlace(null)}
@@ -93,17 +63,22 @@ export const Map = () => {
               </svg>
             </div>
             <img
-              src={selectedPlace.image}
+              src={"https://cdn-icons-png.flaticon.com/512/1259/1259768.png"}
               alt="logo"
               className="w-32 h-full object-contain rounded"
             />
             <div className="ml-4 flex flex-col">
-              <h1 className="text-xl font-sans">{selectedPlace.name}</h1>
+              <h1 className="text-xl font-sans break-words">
+                {selectedPlace.title}
+              </h1>
               <span className="text-tango font-bold text-xl">
                 {selectedPlace.price}
               </span>
               <div className="flex flex-row mt-auto mb-1">
-                <span className="text-gray-400 font-bold text-base">2 bed</span>
+                <span className="text-gray-400 font-bold text-base">
+                  {selectedPlace.bedrooms} bed
+                </span>
+
                 <span className="ml-4 text-gray-400 font-bold text-base">
                   50m²
                 </span>
