@@ -26,7 +26,10 @@ const PlacesAutocompleteInput = ({
 
   const handleSelect = async (address: string) => {
     geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
+      .then((results) => {
+        console.log(results);
+        return getLatLng(results[0]);
+      })
       .then((latLng) => {
         dispatch(setLocation({ address, lat: latLng.lat, lng: latLng.lng }));
         navigate("/rent");

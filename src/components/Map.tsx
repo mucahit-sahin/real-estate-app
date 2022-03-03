@@ -21,6 +21,11 @@ export const Map = () => {
   useEffect(() => {
     dispatch(getProperties());
   }, [dispatch]);
+
+  useEffect(() => {
+    setStartPosition({ lat, lng });
+  }, [lat, lng]);
+
   return (
     <div
       className="flex-3"
@@ -80,7 +85,7 @@ export const Map = () => {
                 </span>
 
                 <span className="ml-4 text-gray-400 font-bold text-base">
-                  50m²
+                  {selectedPlace.squareMeters}m²
                 </span>
               </div>
             </div>
