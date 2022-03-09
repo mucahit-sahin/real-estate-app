@@ -20,6 +20,7 @@ import Profile from "./components/Profile";
 import CreateProperty from "./components/CreateProperty";
 import Loading from "./components/Loading";
 import Alert from "./components/Alert";
+import PropertyDetail from "./components/PropertyDetail";
 
 function App() {
   const { isLoginOpen, isSignupOpen } = useAppSelector((state) => state.modals);
@@ -85,6 +86,15 @@ function App() {
               ) : (
                 <Navigate to="/" />
               )
+            }
+          />
+          <Route
+            path="property/:id"
+            element={
+              <>
+                <PropertyDetail />
+                <Footer />
+              </>
             }
           />
           <Route
