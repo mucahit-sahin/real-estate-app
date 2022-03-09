@@ -20,9 +20,20 @@ const getPropertiesService = async () => {
     }
 };
 
+const getPropertyService = async (id: string) => {
+    try {
+        const response = await api.get(`properties/${id}`);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+
 const propertyServices = {
     createPropertyService,
-    getPropertiesService
+    getPropertiesService,
+    getPropertyService
 };
 
 export default propertyServices;
