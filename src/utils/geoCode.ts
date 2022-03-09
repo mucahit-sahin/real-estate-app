@@ -1,7 +1,4 @@
-
 import Geocode from "react-geocode";
-
-
 
 const geoCode = (lat: string, lng: string) => {
     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY || "");
@@ -36,11 +33,6 @@ const geoCode = (lat: string, lng: string) => {
             if (city === "" ) {
                 city = state;
             }
-            console.log("address", address);
-            console.log("area", area);
-            console.log("city", city);
-            console.log("state", state);
-            console.log("country", country);
             return {
                 area: area,
                 address: address,

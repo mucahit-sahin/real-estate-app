@@ -169,7 +169,10 @@ const CreateProperty = () => {
                   width: "100%",
                 }}
                 zoom={8}
-                center={{ lat: -34.397, lng: 150.644 }}
+                center={{
+                  lat: watch("latitude") || -34.397,
+                  lng: watch("longitude") || 150.644,
+                }}
                 options={{
                   disableDefaultUI: true,
                 }}
