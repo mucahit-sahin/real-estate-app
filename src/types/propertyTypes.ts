@@ -15,8 +15,8 @@ export interface Property {
     address: string;
     city: string;
     state: string;
-    area: string;
     country: string;
+    area: string;
     zipCode: string;
     propertyType: string;
     squareMeters: string;
@@ -27,7 +27,12 @@ export interface Property {
     isDogfriendly: boolean;
     isCatfriendly: boolean;
     isSmokingfriendly: boolean;
-
+    user: User;
+}
+export interface User {
+    _id: number;
+    email: string;
+    fullname: string;
 }
 export interface PropertyFormData {
     title: string;
