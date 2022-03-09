@@ -30,7 +30,18 @@ export const getProperties = createAsyncThunk(
     async () => {
         try {
             const response = await propertyServices.getPropertiesService();
-            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            return error;
+        }
+    }
+);
+
+export const getProperty = createAsyncThunk(
+    "property/getOne",
+    async (id: string) => {
+        try {
+            const response = await propertyServices.getPropertyService(id);
             return response.data;
         } catch (error) {
             return error;
@@ -49,7 +60,7 @@ export const propertySlice = createSlice({
         });
         builder.addCase(createProperty.fulfilled, (state, action) => {
             state.loading = false;
-            state.property = action.payload.data.property;
+            //state.property = action.payload.data.property;
         });
         builder.addCase(createProperty.rejected, (state, action) => {
             state.error = action.error.message||"Something went wrong";
@@ -63,6 +74,17 @@ export const propertySlice = createSlice({
             state.properties = action.payload.properties;
         });
         builder.addCase(getProperties.rejected, (state, action) => {
+            state.error = action.error.message||"Something went wrong";
+            state.loading = false;
+        });
+        builder.addCase(getProperty.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(getProperty.fulfilled, (state, action) => {
+            state.loading = false;
+            state.property = action.payload.property;
+        });
+        builder.addCase(getProperty.rejected, (state, action) => {
             state.error = action.error.message||"Something went wrong";
             state.loading = false;
         });
