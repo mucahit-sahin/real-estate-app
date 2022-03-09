@@ -14,23 +14,33 @@ const geoCode = (lat: string, lng: string) => {
             let area = "";
             let state = "";
             let country = "";
-            addressArray.forEach((element:any) => {
-                if (element.types[0] === "locality") {
+            addressArray.forEach((element: any) => {
+                //country
+                if (element.types[0] === "country") {
+                    country = element.long_name;
+                    
+                }
+                //state
+                else if (element.types[0] === "administrative_area_level_1") {
+                    state = element.long_name;
+                }
+                //area
+                else if (element.types[0] === "administrative_area_level_2") {
+                    area = element.long_name;
+                }
+                //city
+                else if (element.types[0] === "locality") {
                     city = element.long_name;
                 }
-                if (element.types[0] === "administrative_area_level_1") {
-                    state = element.long_name;
-                    country = element.long_name;
-                }
             });
-            area = city;
-            if (state !== city) {
-                area = area + ", " + state;
+            if (city === "" ) {
+                city = state;
             }
-            if (country !== state && country !== city) {
-                area = area + ", " + country;
-            }
-
+            console.log("address", address);
+            console.log("area", area);
+            console.log("city", city);
+            console.log("state", state);
+            console.log("country", country);
             return {
                 area: area,
                 address: address,
