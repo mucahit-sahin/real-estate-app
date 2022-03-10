@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { Property, PropertyFormData, PropertyState } from "../../types/propertyTypes";
+import { Property, PropertyFormData, PropertyState, UpdatePropertyFormData } from "../../types/propertyTypes";
 import propertyServices from "../../services/propertyServices";
 
 const initialState:PropertyState = {
@@ -49,6 +49,18 @@ export const getProperty = createAsyncThunk(
     }
 );
 
+export const updateProperty = createAsyncThunk(
+    "property/update",
+    async (property: UpdatePropertyFormData, thunkAPI) => {
+        try {
+            const response = await propertyServices.updatePropertyService(property);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 
 export const propertySlice = createSlice({
     name: "properties",
@@ -85,6 +97,17 @@ export const propertySlice = createSlice({
             state.property = action.payload.property;
         });
         builder.addCase(getProperty.rejected, (state, action) => {
+            state.error = action.error.message||"Something went wrong";
+            state.loading = false;
+        });
+        builder.addCase(updateProperty.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(updateProperty.fulfilled, (state, action) => {
+            state.loading = false;
+            state.property = action.payload.property;
+        });
+        builder.addCase(updateProperty.rejected, (state, action) => {
             state.error = action.error.message||"Something went wrong";
             state.loading = false;
         });
