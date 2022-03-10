@@ -1,5 +1,5 @@
 import api from "../api/api";
-import { PropertyFormData } from "../types/propertyTypes";
+import { PropertyFormData, UpdatePropertyFormData } from "../types/propertyTypes";
 
 
 const createPropertyService = async (property: PropertyFormData) => {
@@ -29,11 +29,20 @@ const getPropertyService = async (id: string) => {
     }
 };
 
+const updatePropertyService = async (property: UpdatePropertyFormData) => {
+    try {
+        const response = await api.put(`properties/${property._id}`, property);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
 
 const propertyServices = {
     createPropertyService,
     getPropertiesService,
-    getPropertyService
+    getPropertyService,
+    updatePropertyService
 };
 
 export default propertyServices;
