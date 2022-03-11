@@ -5,12 +5,16 @@ import type { RootState } from '../store'
 interface ModalState {
   isLoginOpen: boolean;
   isSignupOpen: boolean;
+  isRemoveModalOpen: boolean;
+  removeModalId: number;
 }
 
 // Define the initial state using that type
 const initialState: ModalState = {
   isLoginOpen: false,
   isSignupOpen: false,
+  isRemoveModalOpen: false,
+  removeModalId: 0
 }
 
 export const modalSlice = createSlice({
@@ -32,11 +36,18 @@ export const modalSlice = createSlice({
     closeSignupModal: (state) => {
       state.isSignupOpen = false;
     },
-
+    openRemoveModal: (state, action) => {
+      state.isRemoveModalOpen = true;
+      state.removeModalId = action.payload;
+    },
+    closeRemoveModal: (state) => {
+      state.isRemoveModalOpen = false;
+      state.removeModalId = 0;
+    },
   },
 })
 
-export const { openLoginModal,closeLoginModal,openSignupModal,closeSignupModal } = modalSlice.actions
+export const { openLoginModal,closeLoginModal,openSignupModal,closeSignupModal,openRemoveModal,closeRemoveModal } = modalSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectIsOpen = (state: RootState) => state.modals.isLoginOpen
