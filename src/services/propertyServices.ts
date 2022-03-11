@@ -38,11 +38,21 @@ const updatePropertyService = async (property: UpdatePropertyFormData) => {
     }
 };
 
+const deletePropertyService = async (id: number) => {
+    try {
+        const response = await api.delete(`properties/${id}`);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
 const propertyServices = {
     createPropertyService,
     getPropertiesService,
     getPropertyService,
-    updatePropertyService
+    updatePropertyService,
+    deletePropertyService
 };
 
 export default propertyServices;
