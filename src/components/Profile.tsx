@@ -1,9 +1,12 @@
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { FaUserCircle } from "react-icons/fa";
+import { FaEdit, FaUserCircle } from "react-icons/fa";
 import ListItem from "./ListItem";
 import { useEffect } from "react";
 import { getProfileProperties } from "../store/slices/UserSlice";
 import { useNavigate } from "react-router-dom";
+import { openRemoveModal } from "../store/slices/ModalSlice";
+import RemoveModal from "./RemoveModal";
+import { AiFillDelete, AiOutlineFolderView } from "react-icons/ai";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -37,28 +40,37 @@ const Profile = () => {
           <div key={index} className="flex flex-col w-full shadow my-3 px-2">
             <div className="flex flex-row items-center">
               <button
-                className="bg-tango text-white text-base font-bold w-48 py-2 px-4 rounded"
-                onClick={() => {
-                  navigate(`/property/${property._id}/edit`);
-                }}
-              >
-                Update
-              </button>
-              <button className="bg-gray-200 text-gray-500 text-base font-bold w-48 py-2 px-4 rounded ml-4">
-                Delete
-              </button>
-              <button
-                className="bg-gray-200 text-gray-500 text-base font-bold w-48 py-2 px-4 rounded ml-4"
+                className="flex flex-row justify-between items-center bg-blue-500 text-white text-base font-bold w-48 py-2 px-4 rounded"
                 onClick={() => {
                   navigate(`/property/${property._id}`);
                 }}
               >
-                View
+                <AiOutlineFolderView />
+                <span>View</span>
+              </button>
+              <button
+                className="flex flex-row justify-between items-center bg-tango text-white text-base font-bold w-48 py-2 px-4 rounded ml-4"
+                onClick={() => {
+                  navigate(`/property/${property._id}/edit`);
+                }}
+              >
+                <FaEdit />
+                <span>Edit</span>
+              </button>
+              <button
+                className="flex flex-row justify-between items-center bg-red-500 text-white text-base font-bold w-48 py-2 px-4 rounded ml-4"
+                onClick={() => dispatch(openRemoveModal(property._id))}
+              >
+                <AiFillDelete />
+                <span>Delete</span>
               </button>
             </div>
             <ListItem property={property} />
           </div>
         ))}
+
+        {/* delete modal */}
+        <RemoveModal />
         {/*  property not found */}
         {!profileProperties ||
           (profileProperties.length === 0 && (
