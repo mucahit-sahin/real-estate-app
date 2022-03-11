@@ -61,6 +61,18 @@ export const updateProperty = createAsyncThunk(
     }
 );
 
+export const deleteProperty = createAsyncThunk(
+    "property/delete",
+    async (id: number, thunkAPI) => {
+        try {
+            const response = await propertyServices.deletePropertyService(id);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 
 export const propertySlice = createSlice({
     name: "properties",
@@ -108,6 +120,17 @@ export const propertySlice = createSlice({
             state.property = action.payload.property;
         });
         builder.addCase(updateProperty.rejected, (state, action) => {
+            state.error = action.error.message||"Something went wrong";
+            state.loading = false;
+        });
+        builder.addCase(deleteProperty.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteProperty.fulfilled, (state, action) => {
+            state.loading = false;
+            state.property = action.payload.property;
+        });
+        builder.addCase(deleteProperty.rejected, (state, action) => {
             state.error = action.error.message||"Something went wrong";
             state.loading = false;
         });
