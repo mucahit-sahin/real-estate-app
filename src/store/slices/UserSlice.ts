@@ -10,6 +10,8 @@ import {
 const initialState: UserState = {
   data: null,
   profileProperties: null,
+  currentPage: 1,
+  numberofpages: 1,
   loading: false,
   error: "",
 } as UserState;
@@ -56,11 +58,11 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 
 export const getProfileProperties = createAsyncThunk(
   "auth/getProfileProperties",
-  async (thunkAPI) => {
+  async (page: number,thunkAPI) => {
     try {
-      return await authServices.getProfileProperties();
+      return await authServices.getProfileProperties(page);
     } catch (error: any) {
-      return;
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -111,6 +113,8 @@ export const userSlice = createSlice({
     });
     builder.addCase(getProfileProperties.fulfilled, (state, action) => {
       state.profileProperties = action.payload.properties;
+      state.numberofpages = action.payload.numberofpages;
+      state.currentPage = action.payload.currentPage;
       state.loading = false;
     });
     builder.addCase(getProfileProperties.rejected, (state) => {

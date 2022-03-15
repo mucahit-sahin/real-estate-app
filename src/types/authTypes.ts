@@ -3,6 +3,8 @@ import { Property } from "./propertyTypes";
 export interface UserState {
   data: UserResponse | null;
   profileProperties: Property[] | null;
+  numberofpages: number;
+  currentPage: number;
   loading: boolean;
   error: string ;
 }

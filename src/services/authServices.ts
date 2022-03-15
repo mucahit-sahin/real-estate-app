@@ -40,8 +40,8 @@ const logout = async () => {
 };
 
 //get profile properties
-const getProfileProperties = async () => {
-  const response = await api.get("user/profile/properties");
+const getProfileProperties = async (page:number) => {
+  const response = await api.get("user/profile/properties?page="+page);
   return response.data;
 };
 
