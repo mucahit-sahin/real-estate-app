@@ -7,15 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { openRemoveModal } from "../store/slices/ModalSlice";
 import RemoveModal from "./RemoveModal";
 import { AiFillDelete, AiOutlineFolderView } from "react-icons/ai";
+import Pagination from "./Pagination";
+import { useQuery } from "../utils/useQuery";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { data, profileProperties } = useAppSelector((state) => state.user);
+  const query = useQuery();
+  const { data, profileProperties, numberofpages, currentPage } =
+    useAppSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getProfileProperties());
-  }, [dispatch]);
+    console.log(query.get("page"));
+    dispatch(
+      getProfileProperties(query.get("page") ? Number(query.get("page")) : 1)
+    );
+  }, [dispatch, query]);
 
   return (
     <div className="flex flex-col md:w-2/3 mx-4 md:mx-auto">
@@ -68,7 +75,8 @@ const Profile = () => {
             <ListItem property={property} />
           </div>
         ))}
-
+        {/* pagination */}
+        <Pagination numberofpages={numberofpages} currentPage={currentPage} />
         {/* delete modal */}
         <RemoveModal />
         {/*  property not found */}
