@@ -19,9 +19,9 @@ My aim in this project is to create a mobile and web compatible website where pr
 
 ## Images
 
-![](https://github.com/mucahit-sahin/real-estate-app/blob/master/img/img1.png)
-![](https://github.com/mucahit-sahin/real-estate-app/blob/master/img/img2.png)
-![](https://github.com/mucahit-sahin/real-estate-app/blob/master/img/img3.png)
-![](https://github.com/mucahit-sahin/real-estate-app/blob/master/img/img4.png)
-![](https://github.com/mucahit-sahin/real-estate-app/blob/master/img/img5.png)
-![](https://github.com/mucahit-sahin/real-estate-app/blob/master/img/img6.png)
+![](https://github.com/mucahit-sahin/real-estate-app/blob/master/images/img1.png)
+![](https://github.com/mucahit-sahin/real-estate-app/blob/master/images/img2.png)
+![](https://github.com/mucahit-sahin/real-estate-app/blob/master/images/img3.png)
+![](https://github.com/mucahit-sahin/real-estate-app/blob/master/images/img4.png)
+![](https://github.com/mucahit-sahin/real-estate-app/blob/master/images/img5.png)
+![](https://github.com/mucahit-sahin/real-estate-app/blob/master/images/img6.png)
