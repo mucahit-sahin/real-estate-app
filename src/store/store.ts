@@ -2,14 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import { alertSlice } from './slices/AlertSlice'
 import { modalSlice } from './slices/ModalSlice'
 import { propertySlice } from './slices/PropertySlice'
-import { searchLocationSlice } from './slices/SearchLocationSlice'
+import { filterPropertySlice } from './slices/FilterPropertySlice'
 import { userSlice } from './slices/UserSlice'
 // ...
 
 export const store = configureStore({
   reducer: {
     modals: modalSlice.reducer,
-    searchLocation: searchLocationSlice.reducer,
+    filters: filterPropertySlice.reducer,
     user: userSlice.reducer,
     property: propertySlice.reducer,
     alert: alertSlice.reducer,

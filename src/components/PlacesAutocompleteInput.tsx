@@ -5,7 +5,7 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/hooks";
-import { setLocation } from "../store/slices/SearchLocationSlice";
+import { setLocation } from "../store/slices/FilterPropertySlice";
 
 const PlacesAutocompleteInput = ({
   className,

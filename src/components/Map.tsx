@@ -6,7 +6,15 @@ import { Property } from "../types/propertyTypes";
 
 export const Map = () => {
   const dispatch = useAppDispatch();
-  const { lat, lng } = useAppSelector((state) => state.searchLocation);
+  const {
+    lat,
+    lng,
+    maxBedrooms,
+    maxPrice,
+    minBedrooms,
+    minPrice,
+    propertyType,
+  } = useAppSelector((state) => state.filters);
   const { properties } = useAppSelector((state) => state.property);
 
   const [selectedPlace, setSelectedPlace] = React.useState<Property | null>();
@@ -19,8 +27,16 @@ export const Map = () => {
   });
 
   useEffect(() => {
-    dispatch(getProperties());
-  }, [dispatch]);
+    dispatch(
+      getProperties({
+        maxBedrooms,
+        minBedrooms,
+        maxPrice,
+        minPrice,
+        propertyType,
+      })
+    );
+  }, [dispatch, maxBedrooms, minBedrooms, maxPrice, minPrice, propertyType]);
 
   useEffect(() => {
     setStartPosition({ lat, lng });

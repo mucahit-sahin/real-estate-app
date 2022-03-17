@@ -26,13 +26,13 @@ export const createProperty = createAsyncThunk(
 );
 
 export const getProperties = createAsyncThunk(
-    "property/get",
-    async () => {
+    "property/getProperties",
+    async (params: { minPrice: number; maxPrice: number; minBedrooms: number; maxBedrooms: number;propertyType:string[] }, thunkAPI) => {
         try {
-            const response = await propertyServices.getPropertiesService();
+            const response = await propertyServices.getPropertiesService(params);
             return response.data;
         } catch (error) {
-            return error;
+            return thunkAPI.rejectWithValue(error);
         }
     }
 );

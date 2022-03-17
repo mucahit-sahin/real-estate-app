@@ -10,19 +10,16 @@ export const FilterSearch = () => {
   const [bedroomIsOpen, setBedroomIsOpen] = React.useState(false);
   const [categoryIsOpen, setCategoryIsOpen] = React.useState(false);
 
-  const { address } = useAppSelector((state) => state.searchLocation);
-  const [minPrice, setMinPrice] = React.useState<number>(0);
-  const [maxPrice, setMaxPrice] = React.useState<number>(0);
-  const [minBedrooms, setMinBedrooms] = React.useState<number>(0);
-  const [maxBedrooms, setMaxBedrooms] = React.useState<number>(0);
-  const [category, setCategory] = React.useState<string[]>([]);
+  const {
+    address,
+    maxBedrooms,
+    minBedrooms,
+    maxPrice,
+    minPrice,
+    propertyType,
+  } = useAppSelector((state) => state.filters);
 
   const priceStatus = () => {
-    if (maxPrice !== 0 && minPrice > maxPrice) {
-      var tmp = maxPrice;
-      setMaxPrice(minPrice);
-      setMinPrice(tmp);
-    }
     if (minPrice === 0 && maxPrice === 0) {
       return "Price Ranges";
     } else if (minPrice === 0 && maxPrice !== 0) {
@@ -34,11 +31,6 @@ export const FilterSearch = () => {
     }
   };
   const bedroomStatus = () => {
-    if (maxBedrooms !== 0 && minBedrooms > maxBedrooms) {
-      var tmp = maxBedrooms;
-      setMaxBedrooms(minBedrooms);
-      setMinBedrooms(tmp);
-    }
     if (minBedrooms === 0 && maxBedrooms === 0) {
       return "Bedrooms";
     } else if (minBedrooms === 0 && maxBedrooms !== 0) {
@@ -81,13 +73,7 @@ export const FilterSearch = () => {
           />
         </div>
         {/* Price Range Modal */}
-        <PriceRanges
-          priceIsOpen={priceIsOpen}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          setMinPrice={setMinPrice}
-          setMaxPrice={setMaxPrice}
-        />
+        <PriceRanges priceIsOpen={priceIsOpen} />
       </div>
       {/*Bedrooms*/}
       <div
@@ -113,8 +99,6 @@ export const FilterSearch = () => {
           bedroomIsOpen={bedroomIsOpen}
           minBedrooms={minBedrooms}
           maxBedrooms={maxBedrooms}
-          setMinBedrooms={setMinBedrooms}
-          setMaxBedrooms={setMaxBedrooms}
         />
       </div>
       {/* Categories */}
@@ -133,8 +117,7 @@ export const FilterSearch = () => {
         {/* Categories Modal */}
         <CategoriesFilter
           categoryIsOpen={categoryIsOpen}
-          category={category}
-          setCategory={setCategory}
+          category={propertyType}
         />
       </div>
 

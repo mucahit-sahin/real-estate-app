@@ -11,9 +11,21 @@ const createPropertyService = async (property: PropertyFormData) => {
     }
 };
 
-const getPropertiesService = async () => { 
+const getPropertiesService = async ({ minPrice, maxPrice, minBedrooms, maxBedrooms,propertyType }: {
+    minPrice: number;
+    maxPrice: number;
+    minBedrooms: number;
+    maxBedrooms: number;
+    propertyType: string[];
+}) => { 
     try {
-        const response = await api.get("properties");
+        const minPriceValue = minPrice !== 0 ? `&minPrice=${minPrice}` : "";
+        const maxPriceValue = maxPrice !== 0 ? `&maxPrice=${maxPrice}` : "";
+        const minBedroomsValue = minBedrooms !== 0 ? `&minBedrooms=${minBedrooms}` : "";
+        const maxBedroomsValue = maxBedrooms !== 0 ? `&maxBedrooms=${maxBedrooms}` : "";
+        const propertyTypeValue = propertyType.length !== 0 ? `&propertyType=${propertyType.toString()}` : "";
+
+        const response = await api.get("properties?" + minPriceValue + maxPriceValue + minBedroomsValue + maxBedroomsValue + propertyTypeValue);
         return response.data;
     } catch (error) {
         return error;
