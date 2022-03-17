@@ -1,18 +1,11 @@
 import React from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setPrice } from "../store/slices/FilterPropertySlice";
 
-export const PriceRanges = ({
-  priceIsOpen,
-  minPrice,
-  maxPrice,
-  setMinPrice,
-  setMaxPrice,
-}: {
-  priceIsOpen: boolean;
-  minPrice: number;
-  maxPrice: number;
-  setMinPrice: React.Dispatch<React.SetStateAction<number>>;
-  setMaxPrice: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+export const PriceRanges = ({ priceIsOpen }: { priceIsOpen: boolean }) => {
+  const dispatch = useAppDispatch();
+  const { minPrice, maxPrice } = useAppSelector((state) => state.filters);
+
   const [minPriceInput, setMinPriceInput] = React.useState<string>(
     minPrice === 0 ? "" : minPrice.toString()
   );
@@ -22,26 +15,30 @@ export const PriceRanges = ({
 
   //min max size controls
   const checkAndSetPrice = () => {
-    if (parseInt(minPriceInput) > parseInt(maxPriceInput)) {
+    if (
+      parseInt(minPriceInput) > parseInt(maxPriceInput) &&
+      maxPriceInput !== ""
+    ) {
       var tmp = maxPriceInput;
       setMaxPriceInput(minPriceInput);
       setMinPriceInput(tmp);
     }
     if (minPriceInput === "") {
-      setMinPrice(0);
+      dispatch(setPrice({ minPrice: 0, maxPrice: parseInt(maxPriceInput) }));
+    } else if (maxPriceInput === "") {
+      dispatch(setPrice({ minPrice: parseInt(minPriceInput), maxPrice: 0 }));
     } else {
-      setMinPrice(parseInt(minPriceInput));
-    }
-    if (maxPriceInput === "") {
-      setMaxPrice(0);
-    } else {
-      setMaxPrice(parseInt(maxPriceInput));
+      dispatch(
+        setPrice({
+          minPrice: parseInt(minPriceInput),
+          maxPrice: parseInt(maxPriceInput),
+        })
+      );
     }
   };
 
   const clearPrice = () => {
-    setMinPrice(0);
-    setMaxPrice(0);
+    dispatch(setPrice({ minPrice: 0, maxPrice: 0 }));
     setMinPriceInput("");
     setMaxPriceInput("");
   };
