@@ -1,20 +1,25 @@
 import React from "react";
+import { useAppDispatch } from "../store/hooks";
+import {
+  addPropertyType,
+  removePropertyType,
+} from "../store/slices/FilterPropertySlice";
 
 export const CategoriesFilter = ({
   categoryIsOpen,
   category,
-  setCategory,
 }: {
   categoryIsOpen: boolean;
   category: string[];
-  setCategory: (category: string[]) => void;
 }) => {
+  const dispatch = useAppDispatch();
+
   const changeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     if (checked) {
-      setCategory([...category, name]);
+      dispatch(addPropertyType(name));
     } else {
-      setCategory(category.filter((c) => c !== name));
+      dispatch(removePropertyType(name));
     }
   };
   return (
@@ -31,8 +36,8 @@ export const CategoriesFilter = ({
             className="rounded mr-3 h-4 w-4"
             type="checkbox"
             id="apartments"
-            name="apartments"
-            value="apartments"
+            name="Apartment"
+            value="Apartment"
             onChange={(e) => changeCheckbox(e)}
           />
           <label className="text-gray-700" htmlFor="apartments">
@@ -44,8 +49,8 @@ export const CategoriesFilter = ({
             className="rounded mr-3 h-4 w-4"
             type="checkbox"
             id="rooms"
-            name="rooms"
-            value="rooms"
+            name="Room"
+            value="Room"
             onChange={(e) => changeCheckbox(e)}
           />
           <label className="text-gray-700" htmlFor="rooms">
@@ -57,8 +62,8 @@ export const CategoriesFilter = ({
             className="rounded mr-3 h-4 w-4"
             type="checkbox"
             id="houses"
-            name="houses"
-            value="houses"
+            name="House"
+            value="House"
             onChange={(e) => changeCheckbox(e)}
           />
           <label className="text-gray-700" htmlFor="houses">
@@ -70,8 +75,8 @@ export const CategoriesFilter = ({
             className="rounded mr-3 h-4 w-4"
             type="checkbox"
             id="cabins"
-            name="cabins"
-            value="cabins"
+            name="Cabin"
+            value="Cabin"
             onChange={(e) => changeCheckbox(e)}
           />
           <label className="text-gray-700" htmlFor="cabins">
