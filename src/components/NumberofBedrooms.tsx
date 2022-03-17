@@ -1,18 +1,18 @@
 import React from "react";
+import { useAppDispatch } from "../store/hooks";
+import { setBedrooms } from "../store/slices/FilterPropertySlice";
 
 export const NumberofBedrooms = ({
   bedroomIsOpen,
   minBedrooms,
   maxBedrooms,
-  setMinBedrooms,
-  setMaxBedrooms,
 }: {
   bedroomIsOpen: boolean;
   minBedrooms: number;
   maxBedrooms: number;
-  setMinBedrooms: React.Dispatch<React.SetStateAction<number>>;
-  setMaxBedrooms: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+  const dispatch = useAppDispatch();
+
   const [minBedroomsInput, setMinBedroomsInput] = React.useState<string>(
     minBedrooms === 0 ? "" : minBedrooms.toString()
   );
@@ -26,20 +26,25 @@ export const NumberofBedrooms = ({
       setMinBedroomsInput(tmp);
     }
     if (minBedroomsInput === "") {
-      setMinBedrooms(0);
+      dispatch(
+        setBedrooms({ minBedrooms: 0, maxBedrooms: parseInt(maxBedroomsInput) })
+      );
+    } else if (maxBedroomsInput === "") {
+      dispatch(
+        setBedrooms({ minBedrooms: parseInt(minBedroomsInput), maxBedrooms: 0 })
+      );
     } else {
-      setMinBedrooms(parseInt(minBedroomsInput));
-    }
-    if (maxBedroomsInput === "") {
-      setMaxBedrooms(0);
-    } else {
-      setMaxBedrooms(parseInt(maxBedroomsInput));
+      dispatch(
+        setBedrooms({
+          minBedrooms: parseInt(minBedroomsInput),
+          maxBedrooms: parseInt(maxBedroomsInput),
+        })
+      );
     }
   };
 
   const clearBedroom = () => {
-    setMinBedrooms(0);
-    setMaxBedrooms(0);
+    dispatch(setBedrooms({ minBedrooms: 0, maxBedrooms: 0 }));
     setMinBedroomsInput("");
     setMaxBedroomsInput("");
   };
