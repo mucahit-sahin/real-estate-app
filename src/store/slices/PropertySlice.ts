@@ -5,7 +5,10 @@ import propertyServices from "../../services/propertyServices";
 
 const initialState:PropertyState = {
     properties: [],
+    propertiesList: [],
     property: {} as Property,
+    numberofpages: 1,
+    currentPage: 1,
     loading: false,
     error: null,
 } as PropertyState;
@@ -27,9 +30,20 @@ export const createProperty = createAsyncThunk(
 
 export const getProperties = createAsyncThunk(
     "property/getProperties",
-    async (params: { minPrice: number; maxPrice: number; minBedrooms: number; maxBedrooms: number;propertyType:string[] }, thunkAPI) => {
+    async (params: { minPrice: number; maxPrice: number; minBedrooms: number; maxBedrooms: number;propertyType:string[]}, thunkAPI) => {
         try {
             const response = await propertyServices.getPropertiesService(params);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+export const getPropertiesToList = createAsyncThunk(
+    "property/getPropertiesToList",
+    async (params: { minPrice: number; maxPrice: number; minBedrooms: number; maxBedrooms: number; propertyType: string[], page: number }, thunkAPI) => {
+        try {
+            const response = await propertyServices.getPropertiesToListService(params);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
@@ -131,6 +145,19 @@ export const propertySlice = createSlice({
             state.property = action.payload.property;
         });
         builder.addCase(deleteProperty.rejected, (state, action) => {
+            state.error = action.error.message||"Something went wrong";
+            state.loading = false;
+        });
+        builder.addCase(getPropertiesToList.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(getPropertiesToList.fulfilled, (state, action) => {
+            state.loading = false;
+            state.propertiesList = action.payload.properties;
+            state.numberofpages = action.payload.numberofpages;
+            state.currentPage = action.payload.currentPage;
+        });
+        builder.addCase(getPropertiesToList.rejected, (state, action) => {
             state.error = action.error.message||"Something went wrong";
             state.loading = false;
         });

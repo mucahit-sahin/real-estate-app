@@ -11,7 +11,7 @@ const createPropertyService = async (property: PropertyFormData) => {
     }
 };
 
-const getPropertiesService = async ({ minPrice, maxPrice, minBedrooms, maxBedrooms,propertyType }: {
+const getPropertiesService = async ({ minPrice, maxPrice, minBedrooms, maxBedrooms,propertyType}: {
     minPrice: number;
     maxPrice: number;
     minBedrooms: number;
@@ -26,6 +26,29 @@ const getPropertiesService = async ({ minPrice, maxPrice, minBedrooms, maxBedroo
         const propertyTypeValue = propertyType.length !== 0 ? `&propertyType=${propertyType.toString()}` : "";
 
         const response = await api.get("properties?" + minPriceValue + maxPriceValue + minBedroomsValue + maxBedroomsValue + propertyTypeValue);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+const getPropertiesToListService = async({ minPrice, maxPrice, minBedrooms, maxBedrooms, propertyType, page }: {
+    minPrice: number;
+    maxPrice: number;
+    minBedrooms: number;
+    maxBedrooms: number;
+    propertyType: string[];
+    page: number;
+}) => {
+    try {
+        const minPriceValue = minPrice !== 0 ? `&minPrice=${minPrice}` : "";
+        const maxPriceValue = maxPrice !== 0 ? `&maxPrice=${maxPrice}` : "";
+        const minBedroomsValue = minBedrooms !== 0 ? `&minBedrooms=${minBedrooms}` : "";
+        const maxBedroomsValue = maxBedrooms !== 0 ? `&maxBedrooms=${maxBedrooms}` : "";
+        const propertyTypeValue = propertyType.length !== 0 ? `&propertyType=${propertyType.toString()}` : "";
+        const pageValue = page !== 0 ? `&page=${page}` : "";
+
+        const response = await api.get("properties?" + minPriceValue + maxPriceValue + minBedroomsValue + maxBedroomsValue + propertyTypeValue + pageValue);
         return response.data;
     } catch (error) {
         return error;
@@ -62,6 +85,7 @@ const deletePropertyService = async (id: number) => {
 const propertyServices = {
     createPropertyService,
     getPropertiesService,
+    getPropertiesToListService,
     getPropertyService,
     updatePropertyService,
     deletePropertyService

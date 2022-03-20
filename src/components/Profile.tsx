@@ -18,7 +18,6 @@ const Profile = () => {
     useAppSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(query.get("page"));
     dispatch(
       getProfileProperties(query.get("page") ? Number(query.get("page")) : 1)
     );
@@ -76,7 +75,11 @@ const Profile = () => {
           </div>
         ))}
         {/* pagination */}
-        <Pagination numberofpages={numberofpages} currentPage={currentPage} />
+        <Pagination
+          numberofpages={numberofpages}
+          currentPage={currentPage}
+          url="profile"
+        />
         {/* delete modal */}
         <RemoveModal />
         {/*  property not found */}

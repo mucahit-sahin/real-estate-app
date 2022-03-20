@@ -1,6 +1,9 @@
 export interface PropertyState {
     properties: Property[];
+    propertiesList: Property[];
     property: Property;
+    numberofpages: number;
+    currentPage: number;
     loading: boolean;
     error: string | null;
 }
