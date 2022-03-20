@@ -4,13 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 const Pagination = ({
   numberofpages,
   currentPage,
+  url,
 }: {
   numberofpages: number;
   currentPage: number;
+  url: string;
 }) => {
   const navigate = useNavigate();
 
-  const [pageNumberLimit, setpageNumberLimit] = useState(3);
+  const [pageNumberLimit] = useState(3);
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(3);
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
 
@@ -24,10 +26,12 @@ const Pagination = ({
       return (
         <Link
           key={number}
-          to={"/profile?page=" + number}
-          className={`px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform ${
-            currentPage === number ? "bg-blue-500" : "bg-white"
-          } rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200`}
+          to={"/" + url + "?page=" + number}
+          className={`px-4 py-2 mx-1  transition-colors duration-200 transform ${
+            currentPage === number
+              ? "bg-tango text-white"
+              : "bg-white text-gray-500"
+          } rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-opacity-70 hover:text-gray-700 dark:hover:text-white`}
         >
           {number}
         </Link>
@@ -39,7 +43,7 @@ const Pagination = ({
 
   const handleNextbtn = () => {
     if (currentPage < numberofpages) {
-      navigate(`/profile?page=${currentPage + 1}`);
+      navigate(`/${url}?page=${Number(currentPage) + 1}`);
 
       if (currentPage + 1 > maxPageNumberLimit) {
         setmaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
@@ -50,7 +54,7 @@ const Pagination = ({
 
   const handlePrevbtn = () => {
     if (currentPage > 1) {
-      navigate(`/profile?page=${currentPage - 1}`);
+      navigate(`/${url}?page=${currentPage - 1}`);
 
       if ((currentPage - 1) % pageNumberLimit === 0) {
         setmaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
@@ -79,13 +83,13 @@ const Pagination = ({
         </svg>
       </button>
       {minPageNumberLimit >= 1 && (
-        <span className="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+        <span className="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-tango dark:hover:bg-tango hover:text-white dark:hover:text-gray-200">
           ...
         </span>
       )}
       {renderPageNumbers}
       {numberofpages > maxPageNumberLimit && (
-        <span className="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+        <span className="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-tango dark:hover:bg-tango hover:text-white dark:hover:text-gray-200">
           ...
         </span>
       )}
