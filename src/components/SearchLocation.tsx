@@ -21,6 +21,7 @@ export const SearchLocation = () => {
             itemsClass="absolute w-full shadow-lg"
             itemClass=" p-2 text-gray-600 font-normal text-base"
             placeholder="Search for a location"
+            navigatePath="/rent"
           />
         </div>
         {/* Recent Searches */}

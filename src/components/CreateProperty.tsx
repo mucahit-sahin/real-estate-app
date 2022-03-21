@@ -1,4 +1,5 @@
 import { GoogleMap, Marker } from "@react-google-maps/api";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -7,6 +8,7 @@ import { createProperty } from "../store/slices/PropertySlice";
 import { PropertyFormData } from "../types/propertyTypes";
 import geoCode from "../utils/geoCode";
 import Loading from "./Loading";
+import PlacesAutocompleteInput from "./PlacesAutocompleteInput";
 
 const CreateProperty = () => {
   const {
@@ -17,7 +19,8 @@ const CreateProperty = () => {
     formState: { errors },
   } = useForm<PropertyFormData>();
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.property);
+  const { loading, error } = useAppSelector((state) => state.property);
+  const { lat, lng } = useAppSelector((state) => state.filters);
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<PropertyFormData> = (
@@ -25,20 +28,29 @@ const CreateProperty = () => {
   ) => {
     console.log(data);
     dispatch(createProperty(data));
-    dispatch(
-      showAlert({
-        message: "Property created successfully",
-        type: AlertType.SUCCESS,
-      })
-    );
-    navigate("/");
+    if (error === null) {
+      dispatch(
+        showAlert({
+          message: "Property created successfully",
+          type: AlertType.SUCCESS,
+        })
+      );
+      navigate("/");
+    } else {
+      dispatch(showAlert({ message: error, type: AlertType.ERROR }));
+    }
   };
+
+  useEffect(() => {
+    setValue("latitude", lat);
+    setValue("longitude", lng);
+  }, [lat, lng, setValue]);
 
   return (
     <div className="w-full md:w-1/2  md:mx-auto">
       {/* Title */}
       <div className="flex flex-row items-center px-4 mt-4">
-        <span className=" text-gray-500 text-5xl lg:text-7xl">
+        <span className=" text-gray-500 text-center text-5xl lg:text-7xl">
           Create Property
         </span>
       </div>
@@ -49,7 +61,7 @@ const CreateProperty = () => {
             <span className="text-sm ">Title</span>
             <input
               type="text"
-              className="w-full rounded border border-gray-400 p-2"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               {...register("title", { required: "You must specify a title" })}
             />
             {errors.title && (
@@ -62,7 +74,7 @@ const CreateProperty = () => {
             <span className="text-sm ">Description</span>
             {/* text area */}
             <textarea
-              className="w-full rounded border border-gray-400 p-2"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               {...register("description", {
                 required: "You must specify a description",
               })}
@@ -77,7 +89,7 @@ const CreateProperty = () => {
             <span className="text-sm ">Price</span>
             <input
               type="text"
-              className="w-full rounded border border-gray-400 p-2"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               {...register("price", {
                 required: "You must specify a price",
                 pattern: {
@@ -97,7 +109,7 @@ const CreateProperty = () => {
               <span className="text-sm ">Email</span>
               <input
                 type="email"
-                className="w-full rounded border border-gray-400 p-2"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 {...register("email", {
                   required: "You must specify an email",
                   pattern: {
@@ -116,7 +128,7 @@ const CreateProperty = () => {
               <span className="text-sm ">Phone Number</span>
               <input
                 type="text"
-                className="w-full rounded border border-gray-400 p-2"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 {...register("phoneNumber", {
                   required: "You must specify a phone number",
                   pattern: {
@@ -137,7 +149,7 @@ const CreateProperty = () => {
             <span className="text-sm ">Address</span>
             <input
               type="text"
-              className="w-full rounded border border-gray-400 p-2"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               {...register("address", {
                 required: "You must specify an address",
               })}
@@ -151,6 +163,12 @@ const CreateProperty = () => {
           <div className="flex flex-row justify-between my-2">
             <div className="flex-1 flex flex-col justify-between mr-1">
               <span className="text-sm ">Select Location</span>
+              <PlacesAutocompleteInput
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                placeholder="Select Location on Map"
+                itemsClass="absolute w-full shadow-lg z-50"
+                itemClass=" p-2 text-gray-600 font-normal text-base"
+              />
               <input
                 type="text"
                 className="hidden"
@@ -167,6 +185,7 @@ const CreateProperty = () => {
                 mapContainerStyle={{
                   height: "300px",
                   width: "100%",
+                  marginTop: "5px",
                 }}
                 zoom={8}
                 center={{
@@ -208,7 +227,7 @@ const CreateProperty = () => {
           <div className="flex flex-col justify-between my-2">
             <span className="text-sm ">Property Type</span>
             <select
-              className="w-full rounded border border-gray-400 p-2"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               {...register("propertyType", {
                 required: "You must specify a property type",
               })}
@@ -230,7 +249,7 @@ const CreateProperty = () => {
               <span className="text-sm ">Zip Code</span>
               <input
                 type="text"
-                className="w-full rounded border border-gray-400 p-2"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 {...register("zipCode", {
                   required: "You must specify a zip code",
                   pattern: {
@@ -249,7 +268,7 @@ const CreateProperty = () => {
               <span className="text-sm ">Property Size(m2)</span>
               <input
                 type="text"
-                className="w-full rounded border border-gray-400 p-2"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 {...register("squareMeters", {
                   required: "You must specify a property size",
                   pattern: {
@@ -270,7 +289,7 @@ const CreateProperty = () => {
               <span className="text-sm ">Bedrooms</span>
               <input
                 type="text"
-                className="w-full rounded border border-gray-400 p-2"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 {...register("bedrooms", {
                   required: "You must specify a number of bedrooms",
                   pattern: {
@@ -289,7 +308,7 @@ const CreateProperty = () => {
               <span className="text-sm ">Bathrooms</span>
               <input
                 type="text"
-                className="w-full rounded border border-gray-400 p-2"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 {...register("bathrooms", {
                   required: "You must specify a number of bathrooms",
                   pattern: {

@@ -13,12 +13,14 @@ const PlacesAutocompleteInput = ({
   placeholder,
   itemsClass,
   value,
+  navigatePath,
 }: {
   className: string;
   itemClass: string;
   placeholder: string;
   itemsClass: string;
   value?: string;
+  navigatePath?: string;
 }) => {
   const [address, setAddress] = useState(value || "");
   const dispatch = useAppDispatch();
@@ -32,7 +34,9 @@ const PlacesAutocompleteInput = ({
       })
       .then((latLng) => {
         dispatch(setLocation({ address, lat: latLng.lat, lng: latLng.lng }));
-        navigate("/rent");
+        if (navigatePath) {
+          navigate(navigatePath);
+        }
       })
       .catch((error) => console.error("Error", error));
   };
