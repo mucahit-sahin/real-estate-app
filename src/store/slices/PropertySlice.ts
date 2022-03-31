@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Property, PropertyFormData, PropertyState, UpdatePropertyFormData } from "../../types/propertyTypes";
 import propertyServices from "../../services/propertyServices";
 
-const initialState:PropertyState = {
+const initialState: PropertyState = {
     properties: [],
     propertiesList: [],
     property: {} as Property,
@@ -95,6 +95,7 @@ export const propertySlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(createProperty.pending, (state, action) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(createProperty.fulfilled, (state, action) => {
             state.loading = false;
@@ -106,6 +107,7 @@ export const propertySlice = createSlice({
         });
         builder.addCase(getProperties.pending, (state, action) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(getProperties.fulfilled, (state, action) => {
             state.loading = false;
@@ -117,6 +119,7 @@ export const propertySlice = createSlice({
         });
         builder.addCase(getProperty.pending, (state, action) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(getProperty.fulfilled, (state, action) => {
             state.loading = false;
@@ -128,6 +131,7 @@ export const propertySlice = createSlice({
         });
         builder.addCase(updateProperty.pending, (state, action) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(updateProperty.fulfilled, (state, action) => {
             state.loading = false;
@@ -139,6 +143,7 @@ export const propertySlice = createSlice({
         });
         builder.addCase(deleteProperty.pending, (state, action) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(deleteProperty.fulfilled, (state, action) => {
             state.loading = false;
@@ -150,6 +155,7 @@ export const propertySlice = createSlice({
         });
         builder.addCase(getPropertiesToList.pending, (state, action) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(getPropertiesToList.fulfilled, (state, action) => {
             state.loading = false;
