@@ -23,22 +23,29 @@ const PlacesAutocompleteInput = ({
   navigatePath?: string;
 }) => {
   const [address, setAddress] = useState(value || "");
-  const dispatch = useAppDispatch();
   let navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleSelect = async (address: string) => {
-    geocodeByAddress(address)
-      .then((results) => {
-        console.log(results);
-        return getLatLng(results[0]);
-      })
-      .then((latLng) => {
-        dispatch(setLocation({ address, lat: latLng.lat, lng: latLng.lng }));
-        if (navigatePath) {
-          navigate(navigatePath);
-        }
-      })
-      .catch((error) => console.error("Error", error));
+    if (navigatePath) {
+      navigate(`${navigatePath}?location=` + address.replaceAll(" ", "_"));
+    } else {
+      geocodeByAddress(address)
+        .then((results) => {
+          console.log(results);
+          return getLatLng(results[0]);
+        })
+        .then((latLng) => {
+          dispatch(
+            setLocation({
+              address,
+              lat: latLng.lat,
+              lng: latLng.lng,
+            })
+          );
+        })
+        .catch((error) => console.error("Error", error));
+    }
   };
   return (
     <PlacesAutocomplete

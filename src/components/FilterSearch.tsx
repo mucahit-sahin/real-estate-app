@@ -10,14 +10,8 @@ export const FilterSearch = () => {
   const [bedroomIsOpen, setBedroomIsOpen] = React.useState(false);
   const [categoryIsOpen, setCategoryIsOpen] = React.useState(false);
 
-  const {
-    address,
-    maxBedrooms,
-    minBedrooms,
-    maxPrice,
-    minPrice,
-    propertyType,
-  } = useAppSelector((state) => state.filters);
+  const { maxBedrooms, minBedrooms, maxPrice, minPrice, propertyType } =
+    useAppSelector((state) => state.filters);
 
   const priceStatus = () => {
     if (minPrice === 0 && maxPrice === 0) {
@@ -50,7 +44,7 @@ export const FilterSearch = () => {
           itemsClass="absolute w-full shadow-lg z-50"
           itemClass=" p-2 text-gray-600 font-normal text-base"
           placeholder="Search for a location"
-          value={address}
+          navigatePath="/rent"
         />
       </div>
       {/*Price Range*/}

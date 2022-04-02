@@ -1,8 +1,11 @@
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import React, { useEffect } from "react";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setLocation } from "../store/slices/FilterPropertySlice";
 import { getProperties } from "../store/slices/PropertySlice";
 import { Property } from "../types/propertyTypes";
+import { useQuery } from "../utils/useQuery";
 
 export const Map = () => {
   const dispatch = useAppDispatch();
@@ -16,15 +19,9 @@ export const Map = () => {
     propertyType,
   } = useAppSelector((state) => state.filters);
   const { properties } = useAppSelector((state) => state.property);
+  const query = useQuery();
 
   const [selectedPlace, setSelectedPlace] = React.useState<Property | null>();
-  const [startPosition, setStartPosition] = React.useState<{
-    lat: number;
-    lng: number;
-  } | null>({
-    lat,
-    lng,
-  });
 
   useEffect(() => {
     dispatch(
@@ -39,8 +36,23 @@ export const Map = () => {
   }, [dispatch, maxBedrooms, minBedrooms, maxPrice, minPrice, propertyType]);
 
   useEffect(() => {
-    setStartPosition({ lat, lng });
-  }, [lat, lng]);
+    if (query.get("location")) {
+      geocodeByAddress(query.get("location") || "")
+        .then((results) => {
+          return getLatLng(results[0]);
+        })
+        .then((latLng) => {
+          dispatch(
+            setLocation({
+              address: query.get("location")?.replaceAll("_", " ") || "",
+              lat: latLng.lat,
+              lng: latLng.lng,
+            })
+          );
+        })
+        .catch((error) => console.error("Error", error));
+    }
+  }, [dispatch, query]);
 
   return (
     <div
@@ -51,7 +63,7 @@ export const Map = () => {
     >
       <GoogleMap
         mapContainerClassName="w-full h-full"
-        center={startPosition || { lat: 0, lng: 0 }}
+        center={{ lat, lng } || { lat: 0, lng: 0 }}
         zoom={10}
         options={{
           disableDefaultUI: true,
