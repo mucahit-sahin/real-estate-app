@@ -50,7 +50,9 @@ export const filterPropertySlice = createSlice({
             }
         },
         addPropertyType: (state: SearchLocationState, action: PayloadAction<string>) => {
-            state.propertyType.push(action.payload);
+            if (state.propertyType.indexOf(action.payload) === -1) {
+                state.propertyType.push(action.payload);
+            }
         },
         removePropertyType: (state: SearchLocationState, action: PayloadAction<string>) => {
             state.propertyType = state.propertyType.filter(type => type !== action.payload);

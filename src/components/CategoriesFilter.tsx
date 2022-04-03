@@ -39,6 +39,7 @@ export const CategoriesFilter = ({
             name="Apartment"
             value="Apartment"
             onChange={(e) => changeCheckbox(e)}
+            checked={category.includes("Apartment")}
           />
           <label className="text-gray-700" htmlFor="apartments">
             Apartments
@@ -52,6 +53,7 @@ export const CategoriesFilter = ({
             name="Room"
             value="Room"
             onChange={(e) => changeCheckbox(e)}
+            checked={category.includes("Room")}
           />
           <label className="text-gray-700" htmlFor="rooms">
             Rooms
@@ -65,6 +67,7 @@ export const CategoriesFilter = ({
             name="House"
             value="House"
             onChange={(e) => changeCheckbox(e)}
+            checked={category.includes("House")}
           />
           <label className="text-gray-700" htmlFor="houses">
             Houses
@@ -78,6 +81,7 @@ export const CategoriesFilter = ({
             name="Cabin"
             value="Cabin"
             onChange={(e) => changeCheckbox(e)}
+            checked={category.includes("Cabin")}
           />
           <label className="text-gray-700" htmlFor="cabins">
             Cabins

@@ -14,27 +14,26 @@ export const Categories = () => {
       <div className="grid gap-2 grid-cols-1 md:grid-cols-3  lg:grid-cols-5">
         <CategoriesItem
           name="Apartments"
-          url="/?category=apartments"
+          value="Apartment"
           icon="https://cdn-icons-png.flaticon.com/512/2101/2101081.png"
         />
         <CategoriesItem
           name="Rooms"
-          url="/?category=rooms"
+          value="Room"
           icon="https://cdn-icons-png.flaticon.com/512/489/489874.png"
         />
         <CategoriesItem
           name="Houses"
-          url="/?category=houses"
+          value="House"
           icon="https://cdn-icons-png.flaticon.com/512/489/489874.png"
         />
         <CategoriesItem
           name="Cabins"
-          url="/?category=cabins"
+          value="Cabin"
           icon="https://cdn-icons-png.flaticon.com/512/292/292968.png"
         />
         <CategoriesItem
           name="All Properties"
-          url="/?category=all"
           icon="https://cdn-icons-png.flaticon.com/512/483/483236.png"
         />
       </div>
