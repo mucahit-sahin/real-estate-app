@@ -100,7 +100,11 @@ export const FilterSearch = () => {
         className="flex relative md:mr-3 mt-2 md:mt-0"
         onClick={() => setCategoryIsOpen(true)}
       >
-        <div className=" w-full md:w-40  flex flex-row items-center bg-white rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none">
+        <div
+          className={` w-full md:w-40  flex flex-row items-center ${
+            propertyType.length > 0 ? "bg-tango text-white" : "bg-white"
+          } rounded  hover:bg-tango  hover:text-white p-2 leading-tight focus:outline-none`}
+        >
           Categories
           <img
             className="ml-auto w-3 h-3 "
