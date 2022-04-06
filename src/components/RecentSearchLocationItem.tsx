@@ -9,7 +9,7 @@ export const RecentSearchLocationItem = ({
 }) => {
   return (
     <Link to={url} className="bg-black bg-opacity-20 p-2 rounded text-center">
-      <span>{name}</span>
+      <span>{name.length > 10 ? name.substring(0, 10) + "..." : name}</span>
     </Link>
   );
 };

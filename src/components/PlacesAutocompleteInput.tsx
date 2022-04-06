@@ -6,6 +6,7 @@ import PlacesAutocomplete, {
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/hooks";
 import { setLocation } from "../store/slices/FilterPropertySlice";
+import geoCode from "../utils/geoCode";
 
 const PlacesAutocompleteInput = ({
   className,
@@ -27,15 +28,43 @@ const PlacesAutocompleteInput = ({
   const dispatch = useAppDispatch();
 
   const handleSelect = async (address: string) => {
-    if (navigatePath) {
-      navigate(`${navigatePath}?location=` + address.replaceAll(" ", "_"));
-    } else {
-      geocodeByAddress(address)
-        .then((results) => {
-          console.log(results);
-          return getLatLng(results[0]);
-        })
-        .then((latLng) => {
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
+        if (navigatePath) {
+          geoCode(latLng.lat.toString(), latLng.lng.toString()).then(
+            (data: any) => {
+              console.log(data);
+              let recent;
+              if (data.city) {
+                recent = data.city;
+              } else if (data.state) {
+                recent = data.state;
+              } else if (data.area) {
+                recent = data.area;
+              } else if (data.country) {
+                recent = data.country;
+              } else {
+                recent = address;
+              }
+              if (localStorage.getItem("recentSearch")) {
+                let recentSearch = JSON.parse(
+                  localStorage.getItem("recentSearch") || "[]"
+                );
+                if (recentSearch.indexOf(data.city) === -1) {
+                  recentSearch.push(recent);
+                  localStorage.setItem(
+                    "recentSearch",
+                    JSON.stringify(recentSearch)
+                  );
+                }
+              } else {
+                localStorage.setItem("recentSearch", JSON.stringify([recent]));
+              }
+            }
+          );
+          navigate(`${navigatePath}?location=` + address.replaceAll(" ", "_"));
+        } else {
           dispatch(
             setLocation({
               address,
@@ -43,9 +72,8 @@ const PlacesAutocompleteInput = ({
               lng: latLng.lng,
             })
           );
-        })
-        .catch((error) => console.error("Error", error));
-    }
+        }
+      });
   };
   return (
     <PlacesAutocomplete

@@ -1,7 +1,11 @@
+import { useState } from "react";
 import PlacesAutocompleteInput from "./PlacesAutocompleteInput";
 import { RecentSearchLocationItem } from "./RecentSearchLocationItem";
 
 export const SearchLocation = () => {
+  const [recentSearch, setRecentSearch] = useState(
+    localStorage.getItem("recentSearch") || "[]"
+  );
   return (
     <div className="bg-tango flex w-full">
       <div className="flex flex-col mx-auto sm:w-1/3 my-5 md:my-8 lg:my-10">
@@ -26,21 +30,32 @@ export const SearchLocation = () => {
         </div>
         {/* Recent Searches */}
         <div className="flex flex-col w-full text-white mt-4 ">
-          <div className="flex flex-row items-center">
-            <span className="text-white text-sm md:text-base lg:text-xl ">
-              Recent Searches
-            </span>
-            <button className="ml-2">
-              <span className="underline text-white text-base">Clear</span>
-            </button>
-          </div>
+          {JSON.parse(recentSearch).length > 0 ? (
+            <div className="flex flex-row items-center">
+              <span className="text-white text-sm md:text-base lg:text-xl ">
+                Recent Searches
+              </span>
+              <button
+                className="ml-2"
+                onClick={() => {
+                  localStorage.removeItem("recentSearch");
+                  setRecentSearch("[]");
+                }}
+              >
+                <span className="underline text-white text-base">Clear</span>
+              </button>
+            </div>
+          ) : null}
           <div className="grid grid-cols-4 gap-4 py-2">
-            <RecentSearchLocationItem name="London" url="/london" />
-            <RecentSearchLocationItem name="Paris" url="/paris" />
-            <RecentSearchLocationItem name="New York" url="/new-york" />
-            <RecentSearchLocationItem name="Tokyo" url="/tokyo" />
-            <RecentSearchLocationItem name="Sydney" url="/sydney" />
-            <RecentSearchLocationItem name="Melbourne" url="/melbourne" />
+            {JSON.parse(recentSearch)
+              .reverse()
+              .map((item: any) => (
+                <RecentSearchLocationItem
+                  key={item}
+                  name={item}
+                  url={"/rent?location=" + item.replaceAll(" ", "_")}
+                />
+              ))}
           </div>
         </div>
       </div>
