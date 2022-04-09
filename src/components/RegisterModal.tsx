@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { closeSignupModal, openLoginModal } from "../store/slices/ModalSlice";
 import { signup } from "../store/slices/UserSlice";
 import { registerFormData } from "../types/authTypes";
@@ -16,6 +16,7 @@ interface IFormInput {
 }
 
 const RegisterModal = () => {
+  const { data, error } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const {
     register,
@@ -31,8 +32,13 @@ const RegisterModal = () => {
       fullname: data.fullname,
     };
     dispatch(signup(formdata));
-    dispatch(closeSignupModal());
   };
+
+  useEffect(() => {
+    if (data) {
+      dispatch(closeSignupModal());
+    }
+  }, [data, dispatch]);
 
   return (
     <div
@@ -151,6 +157,13 @@ const RegisterModal = () => {
                     </span>
                   )}
                 </div>
+                {error !== "" && (
+                  <div className="flex items-center justify-between mt-4">
+                    <span className="text-red-500 dark:text-red-400">
+                      {error}
+                    </span>
+                  </div>
+                )}
                 <div className="mt-4 flex flex-row items-center justify-between">
                   <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
                     Register

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { closeLoginModal, openSignupModal } from "../store/slices/ModalSlice";
 import { loginFormData } from "../types/authTypes";
 import { login } from "../store/slices/UserSlice";
+import { useEffect } from "react";
 
 type IFormInput = {
   email: string;
@@ -12,6 +13,7 @@ type IFormInput = {
 };
 
 const LoginModal = () => {
+  const { data, error } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const {
     register,
@@ -19,14 +21,19 @@ const LoginModal = () => {
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = (fdata) => {
     const formdata: loginFormData = {
-      email: data.email,
-      password: data.password,
+      email: fdata.email,
+      password: fdata.password,
     };
     dispatch(login(formdata));
-    dispatch(closeLoginModal());
   };
+
+  useEffect(() => {
+    if (data) {
+      dispatch(closeLoginModal());
+    }
+  }, [data, dispatch]);
 
   return (
     <div
@@ -90,6 +97,13 @@ const LoginModal = () => {
                   })}
                 />
               </div>
+              {error !== "" && (
+                <div className="flex items-center justify-between mt-4">
+                  <span className="text-red-500 dark:text-red-400">
+                    {error}
+                  </span>
+                </div>
+              )}
 
               <div className="mt-6">
                 <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
