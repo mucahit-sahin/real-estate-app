@@ -22,7 +22,7 @@ import Loading from "./components/Loading";
 import Alert from "./components/Alert";
 import PropertyDetail from "./components/PropertyDetail";
 import EditProperty from "./components/EditProperty";
-import PopularProperties from "./components/PopularProperties";
+import LastProperties from "./components/LastProperties";
 
 function App() {
   const { isLoginOpen, isSignupOpen } = useAppSelector((state) => state.modals);
@@ -52,7 +52,7 @@ function App() {
                 <SearchLocation />
                 <RentoutBannerSM />
                 <Categories />
-                <PopularProperties />
+                <LastProperties />
                 <Footer />
               </>
             }
