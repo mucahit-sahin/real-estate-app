@@ -22,6 +22,7 @@ import Loading from "./components/Loading";
 import Alert from "./components/Alert";
 import PropertyDetail from "./components/PropertyDetail";
 import EditProperty from "./components/EditProperty";
+import PopularProperties from "./components/PopularProperties";
 
 function App() {
   const { isLoginOpen, isSignupOpen } = useAppSelector((state) => state.modals);
@@ -51,6 +52,7 @@ function App() {
                 <SearchLocation />
                 <RentoutBannerSM />
                 <Categories />
+                <PopularProperties />
                 <Footer />
               </>
             }

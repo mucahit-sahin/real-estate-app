@@ -1,6 +1,7 @@
 export interface PropertyState {
     properties: Property[];
     propertiesList: Property[];
+    lastProperties: Property[];
     property: Property;
     numberofpages: number;
     currentPage: number;
@@ -58,6 +59,8 @@ export interface PropertyFormData {
     isDogfriendly: boolean;
     isCatfriendly: boolean;
     isSmokingfriendly: boolean;
+    images: File[];
+    floorPlan: File;
 }
 
 export interface UpdatePropertyFormData { 

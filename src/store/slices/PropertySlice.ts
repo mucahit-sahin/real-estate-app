@@ -6,6 +6,7 @@ import propertyServices from "../../services/propertyServices";
 const initialState: PropertyState = {
     properties: [],
     propertiesList: [],
+    lastProperties:[],
     property: {} as Property,
     numberofpages: 1,
     currentPage: 1,
@@ -87,6 +88,18 @@ export const deleteProperty = createAsyncThunk(
     }
 );
 
+export const getLastProperties = createAsyncThunk(
+    "property/getLast",
+    async () => {
+        try {
+            const response = await propertyServices.getLastPropertiesService();
+            return response.data;
+        } catch (error) {
+            return error;
+        }
+    }
+);
+
 
 export const propertySlice = createSlice({
     name: "properties",
@@ -164,6 +177,18 @@ export const propertySlice = createSlice({
             state.currentPage = action.payload.currentPage;
         });
         builder.addCase(getPropertiesToList.rejected, (state, action) => {
+            state.error = action.error.message||"Something went wrong";
+            state.loading = false;
+        });
+        builder.addCase(getLastProperties.pending, (state, action) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(getLastProperties.fulfilled, (state, action) => {
+            state.loading = false;
+            state.lastProperties = action.payload.properties;
+        });
+        builder.addCase(getLastProperties.rejected, (state, action) => {
             state.error = action.error.message||"Something went wrong";
             state.loading = false;
         });

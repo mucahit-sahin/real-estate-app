@@ -82,13 +82,23 @@ const deletePropertyService = async (id: number) => {
     }
 };
 
+const getLastPropertiesService = async () => { 
+    try {
+        const response = await api.get("properties/last");
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
 const propertyServices = {
     createPropertyService,
     getPropertiesService,
     getPropertiesToListService,
     getPropertyService,
     updatePropertyService,
-    deletePropertyService
+    deletePropertyService,
+    getLastPropertiesService
 };
 
 export default propertyServices;
