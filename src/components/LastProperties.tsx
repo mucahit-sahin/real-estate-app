@@ -5,13 +5,17 @@ import LastPropertyItem from "./LastPropertyItem";
 
 const LastProperties = () => {
   const dispatch = useAppDispatch();
-  const { lastProperties } = useAppSelector((state) => state.property);
+  const { lastProperties, loading } = useAppSelector((state) => state.property);
 
   useEffect(() => {
     dispatch(getLastProperties());
   }, [dispatch]);
 
-  if (!lastProperties) {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (lastProperties.length === 0) {
     return null;
   }
 
@@ -19,7 +23,7 @@ const LastProperties = () => {
     <div className="flex flex-col max-w-5xl mx-3 sm:mx-auto my-4">
       {/* title */}
       <div className="flex mb-3">
-        <span className="text-3xl font-bold">Popular Properties</span>
+        <span className="text-3xl font-bold">Last Properties</span>
       </div>
       {/* Border */}
       <div className="bg-tango h-1 w-20 mb-3"></div>
