@@ -45,11 +45,24 @@ const getProfileProperties = async (page:number) => {
   return response.data;
 };
 
+// change profile picture
+const changeProfilePicture = async (formData: FormData) => {
+  const response = await api.post("user/profile/picture", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 const authServices = {
   signup,
   login,
   logout,
-  loadUser,getProfileProperties
+  loadUser,
+  getProfileProperties,
+  changeProfilePicture
 };
 
 export default authServices;

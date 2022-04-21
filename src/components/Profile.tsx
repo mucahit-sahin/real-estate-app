@@ -2,13 +2,17 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { FaEdit, FaUserCircle } from "react-icons/fa";
 import ListItem from "./ListItem";
 import { useEffect } from "react";
-import { getProfileProperties } from "../store/slices/UserSlice";
+import {
+  changeProfilePicture,
+  getProfileProperties,
+} from "../store/slices/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { openRemoveModal } from "../store/slices/ModalSlice";
 import RemoveModal from "./RemoveModal";
 import { AiFillDelete, AiOutlineFolderView } from "react-icons/ai";
 import Pagination from "./Pagination";
 import { useQuery } from "../utils/useQuery";
+import { AlertType, showAlert } from "../store/slices/AlertSlice";
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -23,14 +27,51 @@ const Profile = () => {
     );
   }, [dispatch, query]);
 
+  const imageHandler = (e: any) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("profilePicture", file);
+    dispatch(changeProfilePicture(formData));
+    dispatch(
+      showAlert({
+        type: AlertType.SUCCESS,
+        message: "Profile picture changed successfully",
+      })
+    );
+  };
+
   return (
     <div className="flex flex-col md:w-2/3 mx-4 md:mx-auto">
       {/* profilepage */}
       <div className="flex flex-row items-center mt-4">
-        <FaUserCircle className="text-tango text-9xl mr-4" />
-        <span className=" text-gray-500 text-5xl lg:text-7xl">
+        <input
+          type="file"
+          id="profilePicture"
+          name="profilePicture"
+          className="hidden"
+          accept="image/*"
+          multiple={false}
+          onChange={(e) => imageHandler(e)}
+        />
+        <label htmlFor="profilePicture" className="flex flex-row items-center">
+          <div className="flex flex-row items-center">
+            {data?.user.profilePicture ? (
+              <img
+                src={
+                  "https://apirealestateproperty.herokuapp.com/" +
+                  data?.user.profilePicture
+                }
+                alt="profile"
+                className="rounded-full w-20 h-20 mr-2"
+              />
+            ) : (
+              <FaUserCircle className="w-20 h-20 mr-2" />
+            )}
+          </div>
+        </label>
+        <div className=" text-gray-500 text-5xl lg:text-7xl">
           {data?.user.fullname}
-        </span>
+        </div>
       </div>
       {/* my properties title */}
       <div className="flex flex-row mt-4">

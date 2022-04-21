@@ -62,6 +62,23 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   await authServices.logout();
 });
 
+export const changeProfilePicture = createAsyncThunk(
+  "auth/changeProfilePicture",
+  async (formData: FormData, thunkAPI) => {
+    try {
+      return await authServices.changeProfilePicture(formData);
+    } catch (error: any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const getProfileProperties = createAsyncThunk(
   "auth/getProfileProperties",
   async (page: number,thunkAPI) => {
@@ -127,6 +144,17 @@ export const userSlice = createSlice({
     });
     builder.addCase(getProfileProperties.rejected, (state) => {
       state.error = "Load User Properties failed";
+      state.loading = false;
+    });
+    builder.addCase(changeProfilePicture.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(changeProfilePicture.fulfilled, (state, action) => {
+      state.data = action.payload.data;
+      state.loading = false;
+    });
+    builder.addCase(changeProfilePicture.rejected, (state, action:any) => {
+      state.error = action.payload;
       state.loading = false;
     });
   },
